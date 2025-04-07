@@ -1,0 +1,29 @@
+@model AirFastNew.Models.AccountViewModel
+
+@{
+    ViewData["Title"] = "Миний профайл";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card shadow-sm p-4">
+    <h4>Хувийн мэдээлэл</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Овог:</strong> @Model.LastName</p>
+            <p><strong>Нэр:</strong> @Model.FirstName</p>
+            <p><strong>И-мэйл:</strong> @Model.Email</p>
+            <p><strong>Утасны дугаар:</strong> @Model.PhoneNumber</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Нэвтрэх нэр:</strong> @Model.UserName</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="Account" asp-action="EditProfile" class="btn btn-primary">Профайл засах</a>
+        <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-warning">Нууц үг солих</a>
+    </div>
+
+</div>

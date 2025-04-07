@@ -1,0 +1,41 @@
+﻿@model AirFastNew.Models.VerifyPhoneNumberViewModel
+@{
+    ViewBag.Title = "Verify Phone Number";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("VerifyPhoneNumber", "Manage", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("phoneNumber", Model.PhoneNumber)
+
+        <h4>Enter verification code</h4>
+        <h5>@ViewBag.Status</h5>
+        <hr />
+
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+        <div class="row mb-3">
+            <label class="col-md-2 col-form-label" for="Code">Verification Code</label>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Code, new { @class = "form-control", placeholder = "Enter code" })
+                @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="offset-md-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    }
+</main>    
+
+@section Scripts {
+    <!-- Include jQuery and jQuery Validation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

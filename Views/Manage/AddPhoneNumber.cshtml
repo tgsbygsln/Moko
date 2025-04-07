@@ -1,0 +1,33 @@
+﻿@model AirFastNew.Models.AddPhoneNumberViewModel
+
+@{
+    ViewBag.Title = "Phone Number";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+
+    <!-- ✅ Use ASP.NET Core Form Tag Helper -->
+    <form asp-action="AddPhoneNumber" asp-controller="Manage" method="post">
+        @Html.AntiForgeryToken()
+        
+        <h4>Add a phone number</h4>
+        <hr />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Number" class="form-label"></label>
+            <input asp-for="Number" class="form-control" />
+            <span asp-validation-for="Number" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">Submit</button>
+    </form>
+</main>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

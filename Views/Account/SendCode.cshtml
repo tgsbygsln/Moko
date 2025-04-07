@@ -1,0 +1,30 @@
+﻿@model AirFastNew.Models.SendCodeViewModel
+@{
+    ViewBag.Title = "Send Verification Code";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+
+    <form asp-action="SendCode" asp-controller="Account" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="RememberMe" />
+
+        <h4>Send verification code</h4>
+        <hr />
+
+        <div class="mb-3">
+            <label for="SelectedProvider" class="form-label">Select Two-Factor Authentication Provider:</label>
+            <select asp-for="SelectedProvider" asp-items="Model.Providers" class="form-control"></select>
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">Submit</button>
+    </form>
+</main>
+
+@section Scripts {
+    <!-- jQuery & Validation Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

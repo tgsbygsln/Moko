@@ -1,0 +1,121 @@
+﻿@model AirFastNew.Models.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Set the correct layout
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Бүртгүүлэх - MoKo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <link rel="shortcut icon" href="~/Content/assets/logos/logo.png" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
+    <!-- Global Stylesheets -->
+    <link href="~/Content/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        a.login-link {
+            color: #0d6efd;
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+
+        a.login-link:hover {
+            color: #0a58ca;
+        }
+    </style>
+</head>
+
+<body id="kt_body" class="bg-body">
+    <div class="d-flex flex-column flex-root">
+        <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+            <!-- Registration Form -->
+            <div class="d-flex flex-column flex-lg-row-fluid py-10">
+                <div class="d-flex flex-center flex-column flex-column-fluid">
+                    <div class="w-lg-600px p-10 p-lg-15 mx-auto">
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "registerForm", role = "form", @class = "form w-100", novalidate = "novalidate" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="mb-10 text-center">
+                                <h1 class="text-dark mb-3">Бүртгэл үүсгэх</h1>
+                                <div class="text-gray-400 fw-bold fs-4">
+                                    Бүртгэлтэй хэрэглэгч бол
+                                    <a href="@Url.Action("Login", "Account")" class="fw-bold login-link">
+                                        энд дарж нэвтрэх хэсэг рүү очих
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mb-7">
+                                @Html.Label("FirstName", "Нэр", new { @class = "form-label fw-bolder text-dark fs-6" })
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.ValidationMessageFor(m => m.FirstName, "Нэр заавал оруулах шаардлагатай!", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-7">
+                                @Html.Label("LastName", "Овог", new { @class = "form-label fw-bolder text-dark fs-6" })
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.ValidationMessageFor(m => m.LastName, "Овог заавал оруулах шаардлагатай!", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-7">
+                                @Html.Label("PhoneNumber", "Утасны дугаар", new { @class = "form-label fw-bolder text-dark fs-6" })
+                                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control form-control-lg form-control-solid", type = "tel" })
+                                @Html.ValidationMessageFor(m => m.PhoneNumber, "Утасны дугаараа оруулна уу!", new { @class = "text-danger" })
+                            </div>
+
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                            <div class="mb-7">
+                                @Html.Label("Email", "Имэйл", new { @class = "form-label fw-bolder text-dark fs-6" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-lg form-control-solid", type = "email" })
+                                @Html.ValidationMessageFor(m => m.Email, "Имэйл хаяг шаардлагатай!", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-7">
+                                @Html.Label("Password", "Нууц үг", new { @class = "form-label fw-bolder text-dark fs-6" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.ValidationMessageFor(m => m.Password, "Нууц үгээ оруулна уу!", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-7">
+                                @Html.Label("ConfirmPassword", "Нууц үг баталгаажуулах", new { @class = "form-label fw-bolder text-dark fs-6" })
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "Нууц үгээ баталгаажуулна уу!", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-lg btn-primary">
+                                    <span class="indicator-label">Бүртгүүлэх</span>
+                                    <span class="indicator-progress">
+                                        Түр хүлээнэ үү...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
+                    <div class="d-flex flex-center fw-bold fs-6">
+                        <a href="#" class="text-muted text-hover-primary px-2">Бидний тухай</a>
+                        <a href="#" class="text-muted text-hover-primary px-2">Тусламж</a>
+                        <a href="#" class="text-muted text-hover-primary px-2">Худалдан авах</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript -->
+    <script src="~/Content/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/Content/assets/js/scripts.bundle.js"></script>
+</body>
+</html>

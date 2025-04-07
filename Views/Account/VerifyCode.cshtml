@@ -1,0 +1,40 @@
+﻿@model AirFastNew.Models.VerifyCodeViewModel
+@{
+    ViewBag.Title = "Verify Code";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+
+    <form asp-action="VerifyCode" asp-controller="Account" method="post">
+        @Html.AntiForgeryToken()
+        
+        <input type="hidden" asp-for="Provider" />
+        <input type="hidden" asp-for="RememberMe" />
+
+        <h4>Enter verification code</h4>
+        <hr />
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Code" class="form-label"></label>
+            <input asp-for="Code" class="form-control" />
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="RememberBrowser" class="form-check-input" />
+            <label asp-for="RememberBrowser" class="form-check-label"></label>
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">Submit</button>
+    </form>
+</main>
+
+@section Scripts {
+    <!-- jQuery & Validation Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

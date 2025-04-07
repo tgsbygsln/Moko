@@ -1,0 +1,24 @@
+@{
+    ViewBag.Title = "Chat with Admin";
+}
+
+<h2>Chat with Admin</h2>
+
+<div id="chat-box" style="border:1px solid #ddd; padding:10px; height:300px; overflow-y:scroll;">
+    <!-- Messages will appear here -->
+</div>
+
+<input type="text" id="message" class="form-control mt-3" placeholder="Type a message...">
+<button class="btn btn-primary mt-2" onclick="sendMessage()">Send</button>
+
+<script>
+    function sendMessage() {
+        let message = document.getElementById("message").value;
+        if (message.trim() !== "") {
+            let chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+            document.getElementById("message").value = "";
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+        }
+    }
+</script>

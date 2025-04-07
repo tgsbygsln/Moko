@@ -1,0 +1,76 @@
+@model AirFastNew.Models.AccountViewModel
+
+@{
+    ViewData["Title"] = "";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="EditProfile" asp-controller="Account" method="post">
+    @Html.AntiForgeryToken()
+    <div class="card-body">
+        <div class="d-flex flex-column-fluid">
+            <div class="container">
+                <div class="card shadow-sm rounded">
+                    <h3 class="position-absolute start-50 translate-middle-x" style="margin-top: 20px;">Хувийн мэдээлэл засах</h3> <!-- Added margin-top -->
+                    <div class="card-body">
+                        <form class="form" id="kt_form">
+                            <div class="tab-content">
+                                <!-- Tab 1 -->
+                                <div class="tab-pane show active" id="kt_user_edit_tab_1" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-xl-7 my-2">
+                                            <!-- Added margin-top to separate from header and button -->
+                                            <div class="row mb-3" style="margin-top: 40px;">
+                                                <label class="col-3 col-form-label text-right text-lg-right">Нэр</label>
+                                                <div class="col-9">
+                                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.FirstName" placeholder="Нэр">
+                                                </div>
+                                            </div>
+
+                                            <!-- Last Name -->
+                                            <div class="row mb-3" style="margin-top: 20px;">
+                                                <label class="col-3 col-form-label text-right text-lg-right">Овог</label>
+                                                <div class="col-9">
+                                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.LastName" placeholder="Овог">
+                                                </div>
+                                            </div>
+
+                                            <!-- Phone Number -->
+                                            <div class="row mb-3" style="margin-top: 20px;">
+                                                <label class="col-3 col-form-label text-right text-lg-right">Утасны дугаар</label>
+                                                <div class="col-9">
+                                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.PhoneNumber" placeholder="Утасны дугаар">
+                                                </div>
+                                            </div>
+
+                                            <!-- Email -->
+                                            <div class="row mb-3" style="margin-top: 20px;">
+                                                <label class="col-3 col-form-label text-right text-lg-right">Имэйл хаяг</label>
+                                                <div class="col-9">
+                                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.Email" placeholder="Имэйл хаяг">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End of Card Body -->
+
+                    <div class="card-footer d-flex justify-content-between mt-4">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">Хадгалах</button>
+                        <button class="btn btn-primary btn-lg btn-block" onclick="window.history.back();">Буцах</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

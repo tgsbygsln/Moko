@@ -1,0 +1,90 @@
+﻿@model AirFastNew.Models.LoginViewModel
+
+@{
+    Layout = null; // No layout
+    ViewBag.Title = "Log in";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title - </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="~/Content/assets/logos/logo.png" />
+    
+    <!-- Global Stylesheets -->
+    <link href="~/Content/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body id="kt_body" class="bg-body">
+    <div class="d-flex flex-column flex-root">
+        <div class="d-flex flex-column flex-column-fluid">
+            <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+                <a href="" class="mb-12">
+                    <img src="~/uploads/logomk2.png" alt="Logo" class="img-fluid" style="width: 60px; height: auto;" asp-append-version="true" />
+                </a>
+
+                <div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+                    <form asp-action="Login" asp-controller="Account" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="text-center mb-10">
+                            <h1 class="text-dark mb-3">Нэвтрэх</h1>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fs-6 fw-bolder text-dark">И-мэйл</label>
+                            <input asp-for="Email" class="form-control form-control-lg form-control-solid" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex flex-stack mb-2">
+                                <label asp-for="Password" class="form-label fw-bolder text-dark fs-6 mb-0">Нууц үг</label>
+                                <a asp-action="ForgotPassword" asp-controller="Account" class="link-primary fs-6 fw-bolder">Нууц үг сэргээх</a>
+                            </div>
+                            <input asp-for="Password" class="form-control form-control-lg form-control-solid" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5">
+                                <span class="indicator-label">Нэвтрэх</span>
+                            </button>
+                            <div class="text-center text-muted text-uppercase fw-bolder mb-5">Эсвэл</div>
+                            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
+                                <img alt="Logo" src="~/Content/assets/media/svg/brand-logos/google-icon.svg" class="h-20px me-3" /> Google эрхээр нэвтрэх
+                            </a>
+                            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
+                                <img alt="Logo" src="~/Content/assets/media/svg/brand-logos/facebook-4.svg" class="h-20px me-3" /> Facebook эрхээр нэвтрэх
+                            </a>
+                            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100">
+                                <img alt="Logo" src="~/Content/assets/media/svg/brand-logos/apple-black.svg" class="h-20px me-3" /> Apple эрхээр нэвтрэх
+                            </a>
+                        </div>
+
+                        <p class="text-center mt-5">
+                            <a href="@Url.Action("Register", "Account")" class="btn btn-lg btn-danger w-100">Бүртгүүлэх</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/Content/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/Content/assets/js/scripts.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let dropdownElements = document.querySelectorAll('.dropdown-toggle');
+            dropdownElements.forEach(el => new bootstrap.Dropdown(el));
+        });
+    </script>
+</body>
+</html>

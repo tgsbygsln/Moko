@@ -1,0 +1,150 @@
+@model AirFastNew.Models.PostDetailsViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@using System.Text.Json
+
+@{
+    ViewBag.Title = "Post Details";
+    var userId = UserManager.GetUserId(User);
+    var isAdmin = User.IsInRole("Admin");
+
+    var photoPaths = string.IsNullOrEmpty(Model.Post.PhotoPathsJson)
+        ? new List<string>()
+        : JsonSerializer.Deserialize<List<string>>(Model.Post.PhotoPathsJson);
+
+    var has3DModel = !string.IsNullOrEmpty(Model.Post.Model3DPath);
+}
+<div class="card mb-5 mb-xl-8 mt-20">
+    <div class="card-body text-center">
+        <div class="d-flex justify-content-start mb-4">
+            <button class="btn btn-light" onclick="window.history.back();">Буцах</button>
+        </div>
+        <div class="card-header border-0 pt-5 text-center">
+            <h3 class="position-absolute start-50 translate-middle-x">Зарын мэдээлэл</h3>
+        </div>
+        <!-- Navigation Menu for Switching Views -->
+        <div class="virtual-menu d-flex justify-content-center mb-3">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="photoTab" data-bs-toggle="tab" href="#photoSection">📷 Зураг</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="modelTab" data-bs-toggle="tab" href="#virtual360">🌀 360 Загвар</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Centered Photo Gallery & 360° Model -->
+        <div class="d-flex flex-column align-items-center">
+            <!-- Photo Gallery -->
+            <div id="photoSection" class="tab-pane fade show active mb-4" style="max-width: 600px; width: 100%;">
+                @if (photoPaths != null && photoPaths.Any())
+                {
+                    <div id="postCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @for (int i = 0; i < photoPaths.Count; i++)
+                            {
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="@photoPaths[i]" class="d-block w-100 rounded shadow" 
+                                        style="max-height: 400px; object-fit: cover;" 
+                                        alt="Post Image">
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#postCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">📷 Одоогоор зураг байхгүй байна</p>
+                }
+            </div>
+
+            <!-- 360° Model -->
+            <div id="virtual360" class="tab-pane fade mb-4" style="max-width: 600px; width: 100%;">
+                @if (has3DModel)
+                {
+                    <model-viewer 
+                        src="@Model.Post.Model3DPath"
+                        ar ar-modes="webxr scene-viewer quick-look" 
+                        camera-controls 
+                        auto-rotate 
+                        style="width: 100%; height: 400px;">
+                    </model-viewer>
+                }
+                else
+                {
+                    <p class="text-muted">🌀 Одоогоор 360 загвар байхгүй байна.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Post Info Below -->
+        <div class="mt-4 p-4 rounded shadow text-start" style="background-color: #f8f9fa; max-width: 600px; margin: auto;">
+            <p><strong>📍 Байршил:</strong> @Model.Post.Location</p>
+            <p><strong>💰 Үнэ:</strong> <span class="text-success fw-bold">₮@Model.Post.Price.ToString("N2")</span></p>
+            <p><strong>📏 Хэмжээ (m²):</strong> @Model.Post.SquareMeters.ToString("N2") m²</p>
+            <p><strong>🏡 Төлөв:</strong> @Model.Post.GetConditionDisplay()</p>
+            <p><strong>📅 Огноо:</strong> @Model.Post.CreatedDate.ToString("yyyy-MM-dd HH:mm")</p>
+            <p>
+                <strong>🏷️ Зарын төрөл:</strong> 
+                <span class="badge @(Model.Post.PostType == "rent" ? "bg-warning text-dark" : "bg-success")">
+                    @(Model.Post.PostType == "rent" ? "🏠Түрээслүүлнэ" : "🏡Худалдана")
+                </span>
+            </p>
+        </div>
+
+        <!-- Delete Button -->
+        @if (isAdmin || userId == Model.Post.UserId)
+        {
+            <button type="button" class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                🗑️ Устгах
+            </button>
+        }
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Нийтлэл устгах</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Та энэ нийтлэлийг устгахдаа итгэлтэй байна уу?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Болих</button>
+                <form id="deleteForm" method="post" action="@Url.Action("Delete", "Posts")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Post.Id" />
+                    <button type="submit" class="btn btn-danger">Устгах</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.1/model-viewer.min.js"></script>
+
+
+
+
+
+@if (Model.Post.CreatedBy == userId || isAdmin)
+            {
+                <form asp-action="DeleteConfirmed" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.Post.Id" />
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Нийтлэл устгах уу?');">
+                        Зар устгах
+                    </button>
+                </form>
+            }

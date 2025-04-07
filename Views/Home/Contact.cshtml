@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    var profileImage = "/Content/assets/media/avatars/150-10.jpg";  
+}
+
+<div class="card mb-5 mb-xl-8 custom-margin">
+    <div class="card-body">
+        <div class="d-flex">
+            <!--begin:: Pic-->
+            <div class="flex-shrink-0 mr-7">
+                <div class="symbol-label"
+                     style="background-image:url('@Url.Content(profileImage)');
+                            background-size: cover; background-position: center;
+                            width: 150px; height: 150px; border-radius: 10px; 
+                            float: left; margin-right: 20px; margin-top: 30px;"> <!-- Increased margin-top to move it lower -->
+                </div>
+            </div>
+            <!--end:: Pic-->
+
+            <!--begin:: Info-->
+            <div class="flex-grow-1">
+                <div class="d-flex flex-column my-2">
+                    <!--begin:: User Info-->
+                    <div class="d-flex align-items-center mr-3">
+                        <p class="font-weight-bold">Б.Төгсбаясгалан | “Монгол Коосэн” Технологийн коллеж | 2025</p>
+                    </div>
+                    <!--end:: User Info-->
+
+                    <!--begin:: Contacts (Separate lines)-->
+                    <div class="d-flex flex-column my-2">
+                        <p><strong>И-мэйл:</strong> <a href="mailto:togsbaysgalan20@gmail.com" class="text-muted text-hover-primary font-weight-bold">togsbaysgalan20@gmail.com</a></p>
+                        <p><strong>Холбоо барих:</strong> <a href="tel:+97699568918" class="text-muted text-hover-primary font-weight-bold">+976 99568918</a></p>
+                    </div>
+                    <!--end:: Contacts-->
+
+                    <!--begin:: Location-->
+                    <p><strong>Хаяг:</strong> Улаанбаатар хот, Баянгол дүүрэг, 5-р хороо, 10-р хороолол, Энхтайваны өргөн чөлөө 90</p>
+                    <!--end:: Location-->
+                </div>
+            </div>
+            <!--end:: Info-->
+        </div>
+    </div>
+</div>

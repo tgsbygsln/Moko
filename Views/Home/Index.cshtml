@@ -1,0 +1,257 @@
+﻿@model List<AirFastNew.Models.Post>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="toolbar py-5 py-lg-15" id="kt_toolbar">
+    <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
+        <div class="page-title d-flex flex-column me-3"></div>
+    </div>
+</div>
+
+<!-- Search Filters -->
+<div class="container-fluid p-4">
+    <div class="row mx-auto py-2 position-relative w-100" style="max-width: 1272px;">
+        <div class="card w-100 p-4 shadow-sm d-flex align-items-center justify-content-between flex-wrap">
+            <div class="d-flex align-items-center gap-3 w-100">
+                <form method="get" action="@Url.Action("Index", "Home")" class="d-flex align-items-center gap-3 w-100">
+                    <!-- District Selection -->
+                    <select class="form-select form-select-lg" name="district">
+                        <option selected disabled>Байршил оруулах</option>
+                        <option value="Баянзүрх" selected="@(ViewBag.SelectedDistrict == "Баянзүрх")">Баянзүрх</option>
+                        <option value="Сүхбаатар" selected="@(ViewBag.SelectedDistrict == "Сүхбаатар")">Сүхбаатар</option>
+                        <option value="Чингэлтэй" selected="@(ViewBag.SelectedDistrict == "Чингэлтэй")">Чингэлтэй</option>
+                        <option value="Хан-Уул" selected="@(ViewBag.SelectedDistrict == "Хан-Уул")">Хан-Уул</option>
+                        <option value="Сонгинохайрхан" selected="@(ViewBag.SelectedDistrict == "Сонгинохайрхан")">Сонгинохайрхан</option>
+                        <option value="Баянгол" selected="@(ViewBag.SelectedDistrict == "Баянгол")">Баянгол</option>
+                        <option value="Налайх" selected="@(ViewBag.SelectedDistrict == "Налайх")">Налайх</option>
+                        <option value="Багануур" selected="@(ViewBag.SelectedDistrict == "Багануур")">Багануур</option>
+                        <option value="Багахангай" selected="@(ViewBag.SelectedDistrict == "Багахангай")">Багахангай</option>
+                    </select>
+
+                    <!-- Price Selection -->
+                    <select class="form-select form-select-lg" name="priceRange">
+                        <option selected disabled>Үнэ оруулах</option>
+                        <option value="0-70'000'000" selected="@(ViewBag.SelectedPriceRange == "0-70'000'000")">0₮ - 70'000'000₮</option>
+                        <option value="70'000'000-100'000'000" selected="@(ViewBag.SelectedPriceRange == "70'000'000-100'000'000")">70'000'000₮ - 100'000'000₮</option>
+                        <option value="100'000'000-200'000'000" selected="@(ViewBag.SelectedPriceRange == "100'000'000-200'000'000")">100'000'000₮ - 200'000'000₮</option>
+                        <option value="200'000'000-350'000'000" selected="@(ViewBag.SelectedPriceRange == "200'000'000-350'000'000")">200'000'000₮ - 350'000'000₮</option>
+                        <option value="350'000'000-550'000'000" selected="@(ViewBag.SelectedPriceRange == "350'000'000-550'000'000")">350'000'000₮ - 550'000'000₮</option>
+                        <option value="550'000'000+" selected="@(ViewBag.SelectedPriceRange == "550'000'000+")">550'000'000+</option>
+                    </select>
+
+                    <!-- Condition Selection -->
+                    <select class="form-select form-select-lg" name="condition">
+                        <option selected disabled>Төлөв оруулах</option>
+                        <option value="New" selected="@(ViewBag.SelectedCondition == "New")">Шинэ</option>
+                        <option value="Good" selected="@(ViewBag.SelectedCondition == "Good")">Хуучин</option>
+                        <option value="Average" selected="@(ViewBag.SelectedCondition == "Average")">Засвартай</option>
+                        <option value="Old" selected="@(ViewBag.SelectedCondition == "Old")">Засвар хийх шаардлагатай</option>
+                    </select>
+
+                    <!-- Post Type Selection -->
+                    <select class="form-select form-select-lg" name="postType">
+                        <option selected disabled>Зарын төрөл</option>
+                        <option value="sale" selected="@(ViewBag.SelectedType == "sale")">Худалдах</option>
+                        <option value="rent" selected="@(ViewBag.SelectedType == "rent")">Түрээслэх</option>
+                    </select>
+                    <button type="button" class="btn btn-secondary" id="clearFilters">
+                        <i</i>Цэвэрлэх
+                    </button>
+
+                    <!-- Search Button -->
+                    <button type="submit" class="btn btn-warning text-white">
+                        <i</i> Хайх
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container d-flex align-items-center justify-content-between my-4">
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="me-auto"> <!-- Moves the button further left -->
+            <a href="@Url.Action("Create", "Posts")" class="btn btn-primary">
+                <i></i>Зар оруулах
+            </a>
+        </div>
+    }
+    <div class="position-absolute start-50 translate-middle-x"> <!-- Forces Post Type Toggle to the middle -->
+        <div class="toggle-container d-flex justify-content-center">
+            <span class="toggle-label">Худалдах</span>
+            <label class="form-switch">
+                <input type="checkbox" id="togglePostType" @(ViewBag.SelectedType == "rent" ? "checked" : "")>
+                <span class="slider round"></span>
+            </label>
+            <span class="toggle-label">Түрээс</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .toggle-container {
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+        padding: 10px 20px;
+        border-radius: 50px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        gap: 15px;
+    }
+
+    .form-switch {
+        position: relative;
+        display: inline-block;
+        width: 55px;
+        height: 30px;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 30px;
+        transition: 0.4s;
+    }
+
+    .slider::before {
+        position: absolute;
+        content: "";
+        height: 24px;
+        width: 24px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+    }
+
+    input:checked + .slider {
+        background-color: #28a745;
+    }
+
+    input:checked + .slider::before {
+        transform: translateX(25px);
+    }
+
+    .toggle-label {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+    }
+</style>
+
+<!-- 🔹 Display Posts -->
+<div class="container-fluid p-4">
+    <div class="row mx-auto py-2 position-relative w-100" style="max-width: 1272px;">
+        <div class="card w-100 p-4 shadow-sm">
+            <div class="d-flex flex-wrap justify-content-center gap-3 w-100">
+                @if (Model.Any())
+                {
+                    @foreach (var post in Model)
+                    {
+                        <div class="border rounded p-3 text-center" style="width: 23%; min-width: 250px;">
+                            <!-- 🔹 Image Carousel for Posts -->
+                            @if (post.PhotoPaths.Any())
+                            {
+                                var carouselId = $"carousel-{post.Id}"; <!-- Unique ID for each post -->
+                                <div id="@carouselId" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < post.PhotoPaths.Count; i++)
+                                        {
+                                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                <img src="@post.PhotoPaths[i]" class="d-block w-100 rounded"
+                                                     style="height: 150px; object-fit: cover;" alt="Post Image">
+                                            </div>
+                                        }
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+
+                            <small class="d-block mt-2">@post.Location • @post.GetConditionDisplay()</small>
+                            <p class="fw-bold">Үнэ: ₮@post.Price.ToString("N0")</p> 
+                            <!-- Sale/Rent Badge -->
+                            <p class="fw-bold text-muted">
+                                <span class="badge @(post.PostType == "rent" ? "bg-warning text-dark" : "bg-success")">
+                                    @(post.PostType == "rent" ? "🏠Түрээслүүлнэ" : "🏡Худалдана")
+                                </span>
+                            </p>
+
+                            <div class="mt-2">
+                                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id" class="btn btn-primary w-100">Дэлгэрэнгүй</a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-center text-muted">Одоогоор зар байхгүй байна.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })">Өмнөх</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })">Дараах</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+@section scripts {
+    <script>
+        document.getElementById("togglePostType").addEventListener("change", function () {
+            let newType = this.checked ? "rent" : "sale";
+            window.location.href = "@Url.Action("Index", "Home")" + "?type=" + newType;
+        });
+    </script>
+    <script>
+        document.getElementById("clearFilters").addEventListener("click", function () {
+            // Get all select elements
+            let selects = document.querySelectorAll("select");
+            selects.forEach(select => select.value = ""); // Reset each select
+
+            // If you have an input field (e.g., text search), reset it too
+            let input = document.querySelector("input[name='search']"); 
+            if (input) input.value = "";
+
+            // Prevent form submission
+            event.preventDefault();
+        });
+    </script>
+}

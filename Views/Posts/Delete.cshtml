@@ -1,0 +1,109 @@
+@model AirFastNew.Models.Post
+
+@{
+    ViewBag.Title = "Delete Post";
+}
+
+<div class="toolbar py-5 py-lg-15" id="kt_toolbar">
+    <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
+        <div class="page-title d-flex flex-column me-3"></div>
+    </div>
+</div>
+
+<div class="card mb-5 mb-xl-8">
+    <div class="card-header border-0 pt-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">Зар устгах</span>
+            <span class="text-muted mt-1 fw-bold fs-7">Та энэ зар устгахдаа итгэлтэй байна уу?</span>
+        </h3>
+    </div>
+
+    <div class="card-body pt-3">
+        @using (Html.BeginForm("DeleteConfirmed", "Posts", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="row g-9 mb-8">
+                <!-- Post Type -->
+                <div class="col-md-6 fv-row">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Post Type</span>
+                    </label>
+                    <input type="text" class="form-control form-control-solid" value="@Model.PostType" readonly />
+                </div>
+
+                <!-- Location -->
+                <div class="col-md-6 fv-row">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Location</span>
+                    </label>
+                    <input type="text" class="form-control form-control-solid" value="@Model.Location" readonly />
+                </div>
+            </div>
+
+            <div class="row g-9 mb-8">
+                <!-- Price -->
+                <div class="col-md-6 fv-row">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Price</span>
+                    </label>
+                    <input type="text" class="form-control form-control-solid" value="@Model.Price" readonly />
+                </div>
+
+                <!-- Size (m²) -->
+                <div class="col-md-6 fv-row">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Size (m²)</span>
+                    </label>
+                    <input type="text" class="form-control form-control-solid" value="@Model.SquareMeters m²" readonly />
+                </div>
+            </div>
+
+            <div class="row g-9 mb-8">
+                <!-- Condition -->
+                <div class="col-md-6 fv-row">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Condition</span>
+                    </label>
+                    <input type="text" class="form-control form-control-solid" value="@Model.GetConditionDisplay()" readonly />
+                </div>
+
+                <!-- Created Date -->
+                <div class="col-md-6 fv-row">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Created Date</span>
+                    </label>
+                    <input type="text" class="form-control form-control-solid" value="@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")" readonly />
+                </div>
+            </div>
+
+            <div class="row g-9 mb-8">
+                <div class="col-md-12 text-center">
+                    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Photos</span>
+                    </label>
+
+                    @if (Model.PhotoPaths != null && Model.PhotoPaths.Any())
+                    {
+                        <div class="d-flex flex-wrap justify-content-center">
+                            @foreach (var photoPath in Model.PhotoPaths)
+                            {
+                                <img src="@photoPath" alt="Post Image" class="img-fluid rounded m-2" style="max-width: 300px;" />
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No images available</p>
+                    }
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="@Url.Action("Index", "Posts")" class="btn btn-light btn-sm me-3">Cancel</a>
+                <button type="submit" class="btn btn-sm" style="color: white; background-color:#d9534f">Delete</button>
+            </div>
+        }
+    </div>
+</div>
