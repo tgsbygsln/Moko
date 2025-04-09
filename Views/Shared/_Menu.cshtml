@@ -11,7 +11,7 @@
             </style>
             <div class="menu menu-lg-rounded d-flex menu-lg-row menu-state-bg menu-title-gray-700 menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
 
-                <div data-kt-menu-placement="bottom-start" class="menu-item show menu-lg-down-accordion me-lg-1 @(ViewData["ActiveMenu"] == "Home" ? "active" : "")">
+                <div data-kt-menu-placement="bottom-start" class="menu-item show menu-lg-down-accordion me-lg-1 @(((string)(ViewData["ActiveMenu"] ?? "") == "Home") ? "active" : "")">
                     <a href="@Url.Action("Index", "Home")" class="menu-link py-3">
                         <span class="menu-title">Home</span>
                         <span class="menu-arrow d-lg-none"></span>
@@ -20,7 +20,7 @@
 
                 @if (User?.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(ViewData["ActiveMenu"] == "MyPosts" ? "active" : "")">
+                    <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(((string)(ViewData["ActiveMenu"] ?? "") == "MyPosts") ? "active" : "")">
                         <a class="menu-link py-3" href="@Url.Action("Index", "Posts")">
                             <span class="menu-title">Миний зарууд</span>
                             <span class="menu-arrow d-lg-none"></span>
@@ -28,7 +28,7 @@
                     </div>
                 }
 
-                <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(ViewData["ActiveMenu"] == "Contact" ? "active" : "")">
+                <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(((string)(ViewData["ActiveMenu"] ?? "") == "Contact") ? "active" : "")">
                     <a href="@Url.Action("Contact", "Home")" class="menu-link py-3">
                         <span class="menu-title">Бидэнтэй холбогдох</span>
                         <span class="menu-arrow d-lg-none"></span>
