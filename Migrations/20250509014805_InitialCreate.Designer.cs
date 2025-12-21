@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirFastNew.Migrations
 {
     [DbContext(typeof(AirFastDbContext))]
-    [Migration("20250322191107_InitialCreate")]
+    [Migration("20250509014805_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -114,8 +114,14 @@ namespace AirFastNew.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("varchar(128)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -128,16 +134,25 @@ namespace AirFastNew.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("PostType")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("PostType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("RejectReason")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("RoomCount")
+                        .HasColumnType("int");
 
                     b.Property<double>("SquareMeters")
                         .HasColumnType("double");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("Posts");
                 });
@@ -157,6 +172,28 @@ namespace AirFastNew.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("AirFastNew.Models.UserViewedPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ViewedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserViewedPosts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -290,6 +327,15 @@ namespace AirFastNew.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("AirFastNew.Models.Post", b =>
+                {
+                    b.HasOne("AirFastNew.Models.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId");
+
+                    b.Navigation("CreatedByUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

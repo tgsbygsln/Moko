@@ -13,14 +13,11 @@
     <div class="topbar-item">
         <div class="btn btn-icon btn-hover-transparent-white d-flex align-items-center btn-lg px-md-2 w-md-auto" id="kt_quick_user_toggle" data-bs-toggle="offcanvas" data-bs-target="#kt_quick_user"
              style="padding: 8px 12px; border-radius: 5px; transition: background-color 0.2s ease-in-out; background-color: rgba(255,255,255,0.1);">
-            
-            <!-- "Сайн уу" Text -->
+
             <span class="text-white opacity-70 font-weight-bold font-size-base d-none d-md-inline me-2">Сайн уу,</span>
-            
-            <!-- First Name -->
+        
             <span class="text-white opacity-90 font-weight-bolder font-size-base d-none d-md-inline me-2">@firstName</span>
 
-            <!-- Profile Picture -->
             <span class="symbol symbol-30">
                 <span class="symbol-label"
                       style="background-image: url('@Url.Content(profileImage)');
@@ -31,7 +28,6 @@
         </div>
     </div>
 
-    <!-- Offcanvas Sidebar -->
     <div id="kt_quick_user" class="offcanvas offcanvas-end p-10" tabindex="-1" aria-labelledby="kt_quick_user_label">
         <div class="offcanvas-header d-flex align-items-center justify-content-between">
             <h5 class="offcanvas-title" id="kt_quick_user_label">Хувийн мэдээлэл</h5>
@@ -55,7 +51,6 @@
                 </div>
             </div>
 
-            <!-- Profile Links -->
             <div class="navi mt-4">
                 <a href="@Url.Action("Profile", "Account")" class="navi-item btn btn-outline-primary w-100 mb-2">Хувийн мэдээлэл</a>
                 <a href="@Url.Action("EditProfile", "Account")" class="navi-item btn btn-outline-secondary w-100 mb-2">Мэдээлэл засах</a>
@@ -72,16 +67,11 @@
 @if (!SignInManager.IsSignedIn(User))
 {
     <div class="d-flex align-items-center ms-3">
-        <a asp-controller="Account" asp-action="Login" class="btn btn-sm text-white" style="background-color:#0099a8;">
+        <a asp-controller="Account" asp-action="Login" class="btn btn-sm text-white" style="background-color: #3B6790;">
             Нэвтрэх
         </a>
     </div>
 }
-
-<!-- Fix Hover Brightness Issue -->
-
-
-<!-- Fix Offcanvas Clicking Issue -->
 @section scripts {
     <style>
         #kt_quick_user_toggle:hover {
@@ -93,7 +83,6 @@
             let offcanvasElement = document.getElementById("kt_quick_user");
             let bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement);
 
-            // Close when clicking outside the sidebar
             document.addEventListener("click", function (event) {
                 if (!offcanvasElement.contains(event.target) && !event.target.closest("[data-bs-toggle='offcanvas']")) {
                     if (offcanvasElement.classList.contains("show")) {
@@ -102,7 +91,6 @@
                 }
             });
 
-            // Ensure the overlay disappears completely
             offcanvasElement.addEventListener("hidden.bs.offcanvas", function () {
                 document.body.classList.remove("offcanvas-backdrop");
                 document.body.classList.remove("offcanvas-open");

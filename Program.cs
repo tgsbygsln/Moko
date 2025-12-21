@@ -37,6 +37,7 @@ builder.Services.Configure<FormOptions>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<RecommendationService>();
 
 var app = builder.Build();
 

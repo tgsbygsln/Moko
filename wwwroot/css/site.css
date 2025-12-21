@@ -153,3 +153,16 @@ p, li, a {
 .custom-margin {
   margin-top: 100px; /* Increase as needed */
 }
+.btn-detail {
+  background-color: #3B6790; /* Soft Indigo */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.btn-detail:hover {
+  background-color: #ffffff; /* Slightly darker */
+}

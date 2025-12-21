@@ -43,7 +43,7 @@
 
                 <div class="col-md-6 fv-row">
                     <label class="fs-6 fw-semibold mb-2">
-                        <span class="required">360 Загвар оруулах</span>
+                        <span class="required">3D Загвар оруулах</span>
                     </label>
                     <input type="file" name="Model3D" id="Model3D" class="form-control form-control-solid" accept=".glb,.gltf,.obj,.stl" />
                     <span class="text-danger" id="model3DError"></span>
@@ -101,6 +101,16 @@
                     <span asp-validation-for="SquareMeters" class="text-danger"></span>
                 </div>
 
+                <div class="col-md-6 fv-row">
+                    <label class="fs-6 fw-semibold mb-2">
+                        <span class="required">Өрөөний тоо</span>
+                    </label>
+                    <input asp-for="RoomCount" class="form-control form-control-solid" placeholder="Өрөөний тоо" type="number" required min="1" />
+                    <span asp-validation-for="RoomCount" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-9 mb-8">
                 <div class="col-md-6 fv-row">
                     <label class="fs-6 fw-semibold mb-2">
                         <span class="required">Төлөв</span>

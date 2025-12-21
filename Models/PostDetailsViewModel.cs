@@ -6,6 +6,7 @@ namespace AirFastNew.Models
     {
         public required Post Post { get; set; }
         public List<Post> OtherPosts { get; set; } = new List<Post>();
+        public List<Post> RecommendedPosts { get; set; } = new List<Post>();
 
     }
 }

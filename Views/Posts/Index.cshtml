@@ -11,13 +11,13 @@
     <div class="card-body pt-3">
         <div class="d-flex justify-content-between mb-4">
             <!-- Left-aligned Create Post Button -->
-            <button class="btn btn-primary btn-md btn-block fw-bold" onclick="window.history.back();">Буцах</button>
+            <button class="btn btn-detail btn-md btn-block fw-bold" onclick="window.history.back();">Буцах</button>
             <!-- Centered Title: Зарууд -->
             <h3 class="position-absolute start-50 translate-middle-x">Миний зарууд</h3>
             <div>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    <a href="@Url.Action("Create", "Posts")" class="btn btn-primary btn-md btn-block">Зар оруулах</a>
+                    <a href="@Url.Action("Create", "Posts")" class="btn btn-detail btn-md btn-block">Зар оруулах</a>
                 }
                 else
                 {
@@ -35,11 +35,12 @@
                         <th>Байршил</th>
                         <th>Хэмжээ (m²)</th>
                         <th>Төлөв</th>
+                        <th>Статус</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.OrderByDescending(p => p.CreatedDate))
                     {
                         <tr style="cursor: pointer;">
                             <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = item.Id })'">
@@ -64,10 +65,24 @@
                             <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = item.Id })'">@item.Location</td>
                             <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = item.Id })'">@item.SquareMeters m²</td>
                             <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = item.Id })'">@item.GetConditionDisplay()</td>
+                            <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = item.Id })'">
+                                @if (item.IsApproved == true)
+                                {
+                                    <span class="text-success">Батлагдсан</span>
+                                }
+                                else if (!string.IsNullOrEmpty(item.RejectReason))
+                                {
+                                    <span class="text-danger" style="cursor: pointer;" onclick="window.location.href='@Url.Action("PendingPosts", "Posts")'">Татгалзсан</span>
+                                }
+                                else
+                                {
+                                    <span class="text-warning">Хүлээгдэж байна</span>
+                                }
+                            </td>
                             <td class="text-end" style="padding-left: 30px;">
                                 @if (item.CreatedBy == _userManager.GetUserId(User) || User.IsInRole("Admin"))
                                 {
-                                    <a href="@Url.Action("Edit", "Posts", new { id = item.Id })" class="btn btn-warning btn-md btn-block fw-bold">Засварлах</a>
+                                    <a href="@Url.Action("Edit", "Posts", new { id = item.Id })" class="btn btn-warning btn-nd btn-block fw-bold" style="padding-right: 20.5px !important; padding-bottom: 9px !important; padding-top: 9px !important;">Засварлах</a>
 
                                     <!-- Delete Button that triggers modal -->
                                     <button type="button" class="btn btn-danger btn-md btn-block fw-bold" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeletePostId(@item.Id)">Устгах</button>
@@ -131,7 +146,41 @@
                     "next": "Дараах",
                     "previous": "Өмнөх"
                 }
-            }
+            },
+            "initComplete": function () {
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    /* Reset hover styles */
+                    .dataTables_wrapper .dataTables_paginate .page-item .page-link:hover {
+                        background-color: transparent !important;
+                        color: #007bff !important;
+                        box-shadow: none !important;
+                    }
+
+                    /* Active page style */
+                    .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+                        background-color: #007bff !important;
+                        color: white !important;
+                        border-radius: 5px;
+                        box-shadow: none !important;
+                        border: none !important;
+                    }
+
+                    /* Remove any remaining default hover effects */
+                    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                        background: none !important;
+                        background-color: transparent !important;
+                        color: #007bff !important;
+                        border: none !important;
+                        box-shadow: none !important;
+                    }
+
+                    .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+                        background: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            },
         });
     });
 
@@ -141,4 +190,17 @@
         document.getElementById("deleteForm").action = "/Posts/DeleteConfirmed/" + postId;
     }
 </script>
+
 }
+
+<style>
+    .btn-detail {
+        background-color: #3B6790;
+        color: white;
+        border: none;
+    }
+
+    .btn-detail:hover {
+        background-color: #325a7a;
+    }
+</style>

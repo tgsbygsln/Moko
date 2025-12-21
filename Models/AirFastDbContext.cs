@@ -36,5 +36,6 @@ namespace AirFastNew.Models
                 entity.Property(r => r.NormalizedName).HasMaxLength(128);
             });
         }
+        public DbSet<UserViewedPost> UserViewedPosts { get; set; }
     }
 }

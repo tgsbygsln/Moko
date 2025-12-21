@@ -1,0 +1,125 @@
+<!-- 🔹 Display Recommended Posts -->
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container-fluid p-4">
+        <h4 class="text-center mb-3">Танд санал болгоx зарууд</h4>
+        <div class="row mx-auto py-2 position-relative w-100" style="max-width: 1272px;">
+            <div class="card w-100 p-4 shadow-sm">
+                <div class="d-flex flex-wrap justify-content-center gap-3 w-100">
+                    @if (Model.RecommendedPosts != null && Model.RecommendedPosts.Any())
+                    {
+                        @foreach (var post in Model.RecommendedPosts.Take(4))
+                        {
+                            <div class="border rounded p-3 text-center" style="width: 23%; min-width: 250px;">
+                                @if (post.PhotoPaths.Any())
+                                {
+                                    var carouselId = $"carousel-recommend-{post.Id}";
+                                    <div id="@carouselId" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @for (int i = 0; i < post.PhotoPaths.Count; i++)
+                                            {
+                                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                    <img src="@post.PhotoPaths[i]" class="d-block w-100 rounded"
+                                                         style="height: 150px; object-fit: cover;" alt="Post Image">
+                                                </div>
+                                            }
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Image</span>
+                                }
+
+                                <small class="d-block mt-2">@post.Location • @post.GetConditionDisplay()</small>
+                                <p class="fw-bold">Үнэ: ₮@post.Price.ToString("N0")</p> 
+                                <p class="fw-bold text-muted">
+                                    <span class="badge @(post.PostType == "rent" ? "bg-warning text-dark" : "bg-success")">
+                                        @(post.PostType == "rent" ? "🏠Түрээслүүлнэ" : "🏡Худалдана")
+                                    </span>
+                                </p>
+
+                                <div class="mt-2">
+                                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id" class="btn-detail w-100">Дэлгэрэнгүй</a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center text-muted">Санал болгох зар олдсонгүй.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- 🔹 Display 8 Latest Posts -->
+<div class="container-fluid p-4">
+    <h4 class="text-center mb-3">Сүүлийн зарууд</h4>
+    <div class="row mx-auto py-2 position-relative w-100" style="max-width: 1272px;">
+        <div class="card w-100 p-4 shadow-sm">
+            <div class="d-flex flex-wrap justify-content-center gap-3 w-100">
+                @if (Model.OtherPosts.Any())
+                {
+                    @foreach (var post in Model.OtherPosts)
+                    {
+                        <div class="border rounded p-3 text-center" style="width: 23%; min-width: 250px;">
+                            <!-- 🔹 Image Carousel for Posts -->
+                            @if (post.PhotoPaths.Any())
+                            {
+                                var carouselId = $"carousel-{post.Id}"; <!-- Unique ID for each post -->
+                                <div id="@carouselId" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < post.PhotoPaths.Count; i++)
+                                        {
+                                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                <img src="@post.PhotoPaths[i]" class="d-block w-100 rounded"
+                                                     style="height: 150px; object-fit: cover;" alt="Post Image">
+                                            </div>
+                                        }
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+
+                            <small class="d-block mt-2">@post.Location • @post.GetConditionDisplay()</small>
+                            <p class="fw-bold">Үнэ: ₮@post.Price.ToString("N0")</p> 
+                            <!-- Sale/Rent Badge -->
+                            <p class="fw-bold text-muted">
+                                <span class="badge @(post.PostType == "rent" ? "bg-warning text-dark" : "bg-success")">
+                                    @(post.PostType == "rent" ? "🏠Түрээслүүлнэ" : "🏡Худалдана")
+                                </span>
+                            </p>
+
+                            <div class="mt-2">
+                                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id" class="btn-detail w-100">Дэлгэрэнгүй</a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-center text-muted">Одоогоор зар байхгүй байна.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,148 @@
+@model IEnumerable<AirFastNew.Models.Post>
+@using System.Text.Json
+@inject Microsoft.AspNetCore.Identity.UserManager<AirFastNew.Models.ApplicationUser> _userManager
+
+@{
+    ViewBag.Title = "Pending Posts";
+}
+
+<div class="card mb-5 mb-xl-8 mt-20">
+    <div class="card-body pt-3">
+        <div class="d-flex justify-content-between mb-4">
+            <button class="btn" style="background-color: #3B6790; color: white;" onclick="window.history.back();">Буцах</button>
+            <h3 class="position-absolute start-50 translate-middle-x">Хүлээгдэж буй зарууд</h3>
+            <div></div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="pendingPostsTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr class="fw-bolder text-muted">
+                        <th>Зураг</th>
+                        <th>Үнэ</th>
+                        <th>Байршил</th>
+                        <th>Хэмжээ (m²)</th>
+                        <th>Төлөв</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var post in Model.Where(p => p.IsApproved == false && string.IsNullOrEmpty(p.RejectReason)))
+                    {
+                        var photoPaths = !string.IsNullOrEmpty(post.PhotoPathsJson) ? JsonSerializer.Deserialize<List<string>>(post.PhotoPathsJson) : new List<string>();
+                        var imagePath = photoPaths?.FirstOrDefault() ?? "https://via.placeholder.com/100";
+
+                        <tr style="cursor: pointer;">
+                            <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = post.Id })'">
+                                @if (!string.IsNullOrEmpty(post.PhotoPathsJson))
+                                {
+                                    var innerPhotoPaths = JsonSerializer.Deserialize<List<string>>(post.PhotoPathsJson);
+                                    if (photoPaths != null && photoPaths.Any())
+                                    {
+                                        <img src="@photoPaths.First()" alt="Post Image" style="width: 100px; height: auto;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="https://via.placeholder.com/100" alt="No Image" style="width: 100px; height: auto;" />
+                                    }
+                                }
+                                else
+                                {
+                                    <img src="https://via.placeholder.com/100" alt="No Image" style="width: 100px; height: auto;" />
+                                }
+                            </td>
+                            <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = post.Id })'">@post.Price.ToString("N0")₮</td>
+                            <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = post.Id })'">@post.Location</td>
+                            <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = post.Id })'">@post.SquareMeters m²</td>
+                            <td onclick="window.location.href='@Url.Action("Details", "Posts", new { id = post.Id })'">@post.GetConditionDisplay()</td>
+                            <td>
+                                <form asp-action="Approve" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="@post.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">Батлах</button>
+                                </form>
+
+                                <form asp-action="Reject" method="post" style="display:inline" class="mt-1">
+                                    <input type="hidden" name="id" value="@post.Id" />
+                                    <input type="text" name="reason" placeholder="Татгалзах шалтгаан" class="form-control form-control-sm d-inline-block w-75" required />
+                                    <button type="submit" class="btn btn-danger btn-sm">Татгалзах</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('#pendingPostsTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "lengthMenu": "Харах _MENU_ нийтлэл",
+                "zeroRecords": "Ямар ч өгөгдөл олдсонгүй",
+                "info": "_PAGE_ - _PAGES_ нийт хуудсаас",
+                "infoEmpty": "Бичлэг алга",
+                "infoFiltered": "(нийт _MAX_ бичлэгээс шүүгдсэн)",
+                "search": "Хайх:",
+                "paginate": {
+                    "first": "Эхний",
+                    "last": "Сүүлийн",
+                    "next": "Дараах",
+                    "previous": "Өмнөх"
+                }
+            },
+            "initComplete": function () {
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    /* Reset hover styles */
+                    .dataTables_wrapper .dataTables_paginate .page-item .page-link:hover {
+                        background-color: transparent !important;
+                        color: #007bff !important;
+                        box-shadow: none !important;
+                    }
+
+                    /* Active page style */
+                    .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+                        background-color: #007bff !important;
+                        color: white !important;
+                        border-radius: 5px;
+                        box-shadow: none !important;
+                        border: none !important;
+                    }
+
+                    /* Remove any remaining default hover effects */
+                    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                        background: none !important;
+                        background-color: transparent !important;
+                        color: #007bff !important;
+                        border: none !important;
+                        box-shadow: none !important;
+                    }
+
+                    .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+                        background: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            },
+        });
+    });
+
+    // Function to set post ID for deletion
+    function setDeletePostId(postId) {
+        document.getElementById("deletePostId").value = postId;
+        document.getElementById("deleteForm").action = "/Posts/DeleteConfirmed/" + postId;
+    }
+</script>
+}

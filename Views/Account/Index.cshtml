@@ -1,13 +1,13 @@
 @model AirFastNew.Models.AccountViewModel
 
 @{
-    ViewData["Title"] = "Миний профайл";
+    ViewData["Title"] = "";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <div class="card shadow-sm p-4">
-    <h4>Хувийн мэдээлэл</h4>
+    <h4>Миний профайл</h4>
     <hr>
     <div class="row">
         <div class="col-md-6">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="mt-4">
-        <a asp-controller="Account" asp-action="EditProfile" class="btn btn-primary">Профайл засах</a>
+        <a asp-controller="Account" asp-action="EditProfile" class="btn" style="background-color: #3B6790; color: white;">Профайл засах</a>
         <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-warning">Нууц үг солих</a>
     </div>
 

@@ -6,7 +6,7 @@
             <!--begin::Menu-->
             <style>
                 .menu-link {
-                    text-decoration: none !important;  /* Remove underline */
+                    text-decoration: none !important;  
                 }
             </style>
             <div class="menu menu-lg-rounded d-flex menu-lg-row menu-state-bg menu-title-gray-700 menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
@@ -18,6 +18,7 @@
                     </a>
                 </div>
 
+                
                 @if (User?.Identity != null && User.Identity.IsAuthenticated)
                 {
                     <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(((string)(ViewData["ActiveMenu"] ?? "") == "MyPosts") ? "active" : "")">
@@ -35,10 +36,24 @@
                     </a>
                 </div>
 
+                @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(((string)(ViewData["ActiveMenu"] ?? "") == "MyPosts") ? "active" : "")">
+                        <a class="menu-link py-3" href="@Url.Action("PendingPosts", "Posts")">
+                            <span class="menu-title">Хүсэлтүүд</span>
+                            <span class="menu-arrow d-lg-none"></span>
+                        </a>
+                    </div>
+                }
+                <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 @(((string)(ViewData["ActiveMenu"] ?? "") == "HowToUpload3D") ? "active" : "")">
+                    <a href="@Url.Action("HowToUpload3D", "Posts")" class="menu-link py-3">
+                        <span class="menu-title">3D Загвар нэмэх заавар</span>
+                        <span class="menu-arrow d-lg-none"></span>
+                    </a>
+                </div>
+
             </div>
             <!--end::Menu-->
         </div>
-        <!--end::Menu wrapper-->
     </div>
-    <!--end::Navbar-->
 </div>

@@ -24,6 +24,7 @@ namespace AirFastNew.Controllers
         public IActionResult Index(string district, string priceRange, string condition, string sortBy, string type, int page = 1, int pageSize = 8)
         {
             var posts = _context.Posts.AsQueryable();
+            posts = posts.Where(p => p.IsApproved == true);
 
             // Preserve filter selections
             ViewBag.SelectedDistrict = district;

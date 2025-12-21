@@ -117,6 +117,9 @@ namespace AirFastNew.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -134,6 +137,12 @@ namespace AirFastNew.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("RejectReason")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("RoomCount")
+                        .HasColumnType("int");
 
                     b.Property<double>("SquareMeters")
                         .HasColumnType("double");
@@ -160,6 +169,28 @@ namespace AirFastNew.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("AirFastNew.Models.UserViewedPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ViewedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserViewedPosts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

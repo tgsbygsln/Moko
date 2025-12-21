@@ -31,6 +31,10 @@ namespace AirFastNew.Models
         [Range(1, double.MaxValue, ErrorMessage = "Size must be greater than zero.")]
         [Display(Name = "Size (m²)")]
         public double SquareMeters { get; set; }
+        [Required]
+        [Range(1, 20, ErrorMessage = "Room count must be between 1 and 20.")]
+        [Display(Name = "Room Count")]
+        public int RoomCount { get; set; }
 
         [Required]
         [Display(Name = "Condition")]
@@ -61,5 +65,7 @@ namespace AirFastNew.Models
         }
 
         public string? PhoneNumber => CreatedByUser?.PhoneNumber;
+        public bool? IsApproved { get; set; } // nullable болгож байна
+        public string? RejectReason { get; set; }
     }
 }

@@ -20,12 +20,14 @@ namespace AirFastNew.Controllers
         private readonly AirFastDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<PostsController> _logger;
+        private readonly RecommendationService _recommendationService;
 
-        public PostsController(AirFastDbContext context, UserManager<ApplicationUser> userManager, ILogger<PostsController> logger)
+        public PostsController(AirFastDbContext context, UserManager<ApplicationUser> userManager, ILogger<PostsController> logger, RecommendationService recommendationService)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
+            _recommendationService = recommendationService;
         }
         [AllowAnonymous]
         [Authorize]
@@ -39,16 +41,39 @@ namespace AirFastNew.Controllers
                 return NotFound();
             }
 
+            // Log the user's viewed post
+            var userId = _userManager.GetUserId(User);
+            if (userId != null)
+            {
+                _context.UserViewedPosts.Add(new UserViewedPost
+                {
+                    UserId = userId,
+                    PostId = id,
+                    ViewedAt = DateTime.UtcNow
+                });
+                await _context.SaveChangesAsync();
+            }
+
+            if (post.IsApproved == false && post.RejectReason != null)
+            {
+                ViewBag.RejectReason = post.RejectReason;
+            }
+
             var latestPosts = await _context.Posts
                 .Where(p => p.Id != id)  // Exclude the current post
                 .OrderByDescending(p => p.CreatedDate) // Sort newest first
                 .Take(4) // Limit to 8 posts
                 .ToListAsync();
 
+            var recommendedPosts = userId != null 
+                ? await _recommendationService.GetRecommendedPosts(userId) 
+                : new List<Post>();
+
             var viewModel = new PostDetailsViewModel
             {
                 Post = post,
-                OtherPosts = latestPosts
+                OtherPosts = latestPosts,
+                RecommendedPosts = recommendedPosts
             };
 
             return View(viewModel);
@@ -81,6 +106,8 @@ namespace AirFastNew.Controllers
 
                 return View(post);
             }
+
+            post.IsApproved = false;
 
             
             var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
@@ -174,7 +201,7 @@ namespace AirFastNew.Controllers
             if (!User.IsInRole("Admin"))
             {
                 var userId = _userManager.GetUserId(User);  
-                posts = posts.Where(p => p.CreatedBy == userId); 
+                posts = posts.Where(p => p.CreatedBy == userId || p.IsApproved == true);
             }
 
             if (!string.IsNullOrEmpty(district))
@@ -228,6 +255,52 @@ namespace AirFastNew.Controllers
             }
 
             return View(post);
+        }
+        // Admin харуулах - зөвхөн батлагдаагүй зарууд
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PendingPosts()
+        {
+            var posts = await _context.Posts
+                .Where(p => p.IsApproved == false)
+                .ToListAsync();
+            return View(posts);
+        }
+
+        // Admin батлах
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post == null)
+                return NotFound();
+
+            post.IsApproved = true;
+            post.RejectReason = null;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(PendingPosts));
+        }
+
+        // Admin татгалзах
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Reject(int id, string reason)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post == null)
+                return NotFound();
+
+            post.IsApproved = false;
+            post.RejectReason = reason;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(PendingPosts));
+        }
+        [AllowAnonymous]
+        public IActionResult HowToUpload3D()
+        {
+            return View();
         }
     }
 }
